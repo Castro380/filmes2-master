@@ -10,7 +10,7 @@ const index = (props) => {
 
 
   return (
-    <Pagina titulo="no ar">
+    <Pagina titulo="no ar"> 
 
       <Row md={4}>
 

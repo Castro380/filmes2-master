@@ -1,10 +1,11 @@
+import Galeria from '@/components/Galeria'
 import Pagina from '@/components/Pagina'
 import apiFilmes from '@/services/apiFilmes'
 import Link from 'next/link'
 import React from 'react'
 import { Card, Col, Row } from 'react-bootstrap'
 
-const Detalhes = ({ ator, imagens, filmes, tvs }) => {
+const Detalhes = ({ ator, imagens, filmes, series }) => {
     return (
         <Pagina titulo={ator.name}>
 
@@ -20,36 +21,10 @@ const Detalhes = ({ ator, imagens, filmes, tvs }) => {
                 </Col>
             </Row>
 
-            <h2 className='mt-4'>Imagens</h2>
-            <Row>
-                {imagens.map(item => (
-                    <Col className='mb-4' md={1}>
-                        <Card.Img variant="top" src={'https://image.tmdb.org/t/p/w500/' + item.file_path} />
-                    </Col>
-                ))}
-            </Row>
+             <Galeria titulo= "imagens"lista={imagens} foto="file_path" size={1} /> 
+             <Galeria titulo="Filmes em que Atuou" lista={filmes} foto="poster_path"  /> 
+             <Galeria titulo="Séries em que Atuou" lista={series} foto="poster_path" link="/series/" /> 
 
-            <h2 className='mt-4'>Filmes em que atuou:</h2>
-            <Row>
-                {filmes.map(item => (
-                    <Col className='mb-4' md={2} title={item.name}>
-                        <Link href={'/filmes/' + item.id}>
-                            <Card.Img title={item.name} variant="top" src={'https://image.tmdb.org/t/p/w500/' + item.poster_path} />
-                        </Link>
-                    </Col>
-                ))}
-            </Row>
-
-            <h2 className='mt-4'>Séries de TV em que atuou:</h2>
-            <Row>
-                {tvs.map(item => (
-                    <Col className='mb-4' md={2} title={item.name}>
-                        <Link href={'/filmes/' + item.id}>
-                            <Card.Img title={item.name} variant="top" src={'https://image.tmdb.org/t/p/w500/' + item.poster_path} />
-                        </Link>
-                    </Col>
-                ))}
-            </Row>
 
         </Pagina>
     )
@@ -71,9 +46,9 @@ export async function getServerSideProps(context) {
     const filmes = resFilmes.data.cast
 
     const resTv = await apiFilmes.get('/person/' + id + '/tv_credits?language=pt-BR')
-    const tvs = resTv.data.cast
+    const series = resTv.data.cast
 
     return {
-        props: { ator, imagens, filmes, tvs }
+        props: { ator, imagens, filmes, series }
     }
 }
